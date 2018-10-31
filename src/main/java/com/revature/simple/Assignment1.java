@@ -1,17 +1,52 @@
 package com.revature.simple;
 
+import org.apache.log4j.Logger;
+
+import com.revature.simple.Assignment1;
+
 import java.util.Stack;
 
 public class Assignment1 implements JavaSimple {
+	
+	private static final Logger LOGGER = Logger.getLogger(Assignment1.class);
 	
 	public static void main(String args[]) {
 		new Assignment1();
 	}
 	
 	public Assignment1() {
+		//check if isPrime is working
+		LOGGER.info(isPrime(0));
+		
+		//check if rotateLeft is working
 		int[] array = {1,2,3,4,5};
-		System.out.println(isPrime(0));
-		//System.out.println(rotateLeft(array,2));
+		array = rotateLeft(array,2);
+		for (int n:array) {
+			LOGGER.info(n);
+		}
+		
+		//check if balancedBrackets works
+		LOGGER.info(balancedBrackets("[({{}})]"));
+		
+		//check if isEven works
+		LOGGER.info(isEven(6));
+		LOGGER.info(isEven(7));
+		
+		//check if sort works
+		sort(array);
+		for (int n:array) {
+			LOGGER.info(n+" ");
+		}
+		
+		//check if max works
+		LOGGER.info(max(array));
+		
+		//check if fibbonaci works
+		LOGGER.info(fibonacci(5));
+		
+		//check if factorial works
+		LOGGER.info(factorial(5));
+		
 	}
 
 	@Override
@@ -33,8 +68,7 @@ public class Assignment1 implements JavaSimple {
 
 	@Override
 	public boolean isEven(int n) {
-		double num = (double)n/2.0;
-		return num==Math.floor(num);
+		return (double)n/2.0==Math.floor((double)n/2.0);
 	}
 
 	@Override
@@ -122,20 +156,13 @@ public class Assignment1 implements JavaSimple {
 		if (n<0 || array==null)
 			throw new IllegalArgumentException("Invalid Parameters");
 		
-		int[] tempArray = new int[n];
-		for (int i=0;i<array.length;i++) {
-			if (i<n) {
-				System.out.println(i + "  " + n + "  " + tempArray.length);
-				tempArray[i]=array[i];
-				array[i]=array[(i+n)%array.length];
-			}
-			else {
-				array[i]=tempArray[i-n];
-			}
-			
+		int[] newArray = new int[array.length];
 		
+		for (int m=0;m<array.length;m++) {
+			newArray[m] = array[(m+n)%array.length];
 		}
-		return array;
+		
+		return newArray;
 	}
 
 	@Override
@@ -144,15 +171,8 @@ public class Assignment1 implements JavaSimple {
 			throw new IllegalArgumentException("n cannot be less than 0");
 		
 		int m;
-		for (m=2;!isDivisible(n,m) && n>1;m++);
-		
+		for (m=2;n%m!=0 && n>1;m++);
 		return (m==n || n==1 || n==0) ? "Is Prime" : "Is Not Prime";
-	}
-	
-	//checks whether n is evenly divisible by m
-	public boolean isDivisible(int n,int m) {
-		return n%m==0;
-	
 	}
 
 	@Override
@@ -166,9 +186,14 @@ public class Assignment1 implements JavaSimple {
 			if (brackets.charAt(n)=='(' || brackets.charAt(n)=='{' || brackets.charAt(n)=='[') {
 				stack.push(brackets.charAt(n));
 			}
-			else if (brackets.charAt(n)==')' || brackets.charAt(n)=='}' || brackets.charAt(n)==']') {
-				if ((char)stack.pop()!=brackets.charAt(n))
-					return false;
+			else if (brackets.charAt(n)==')' && (char)stack.pop()!='(') {
+				return false;
+			}
+			else if (brackets.charAt(n)=='}' && (char)stack.pop()!='{') {
+				return false;
+			}
+			else if (brackets.charAt(n)==']' && (char)stack.pop()!='[') {
+				return false;
 			}
 		}
 		
