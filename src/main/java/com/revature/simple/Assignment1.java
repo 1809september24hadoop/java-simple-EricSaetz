@@ -128,6 +128,7 @@ public class Assignment1 implements JavaSimple {
 		int temp;
 		int min = 0;
 		for (int currentNum=0;currentNum<array.length;currentNum++) {
+			min = currentNum;
 			for (int n=currentNum;n<array.length;n++) {
 				if (array[n]<array[min])
 					min=n;
